@@ -1,92 +1,135 @@
-#define  _CRT_SECURE_NO_WARNINGS 1
+#define _CRT_SECURE_NO_WARNINGS 1
 #include<stdio.h>
 #include<stdlib.h>
-#include<Windows.h>.h>
+#include<Windows.h>
 #include<string.h>
 
 
-int Add(int x, int y)
-{
+double Add(double x, double y) {
     return x + y;
 }
 
-int Sub(int x, int y)
-{
+double Sub(double x, double y) {
     return x - y;
 }
 
-int Mul(int x, int y)
-{
+double Mul(double x, double y) {
     return x * y;
 }
 
-int Div(int x, int y)
-{
+double Div(double x, double y) {
+    if (y == 0) {
+        printf("é™¤æ•°ä¸èƒ½ä¸º0\n");
+        return 0;
+    }
     return x / y;
 }
 
-void ref()
-{
-    for (int a = 3; a >= 0; a--)
-    {
-        printf("ÏµÍ³ÔÚ%dÃëºóË¢ĞÂ\n", a);
+long And(long x, long y) {
+    return x & y;
+}
+
+long Or(long x, long y) {
+    return x | y;
+}
+
+long Cpl(long x) {
+    return ~x;
+}
+
+void ref() {
+    for (int a = 3; a >= 0; a--) {
+        printf("ç³»ç»Ÿåœ¨%dç§’ååˆ·æ–°\n", a);
         Sleep(1000);
     }
     system("cls");
 }
 
-void meau()
-{
-    puts("1: ¼Ó·¨\n"
-        "2£º¼õ·¨\n"
-        "3£º³Ë·¨\n"
-        "4£º³ı·¨\n"
-        "0: ÍË³ö\n");
-    puts("ÇëÊäÈëÊı×Ö");
+void menu() {
+    puts("1: åŠ æ³•+\n"
+        "2ï¼šå‡æ³•-\n"
+        "3ï¼šä¹˜æ³•*\n"
+        "4ï¼šé™¤æ³•/\n"
+        "5:æŒ‰ä½ä¸&\n"
+        "6:æŒ‰ä½æˆ–|\n"
+        "7:æŒ‰ä½å–å\n"
+        "0: é€€å‡º\n");
+    puts("è¯·è¾“å…¥æ•°å­—");
 }
 
-void calc(int(*pf)(int, int))
-{
-    int x = 0;
-    int y = 0;
-    int ret = 0;
+void calc(double(*pf1)(double, double), long(*pf2)(long, long)) {
+    double x = 0.0;
+    double y = 0.0;
+    long x2 = 0;
+    long y2 = 0;
+    double ret1 = 0.0;
+    long ret2 = 0;
     int c = 0;
-    printf("ÇëÊäÈëÊıÖµ£º");
-    scanf("%d %d", &x, &y);
-    ret = pf(x, y);
-    printf("%d\n", ret);
-    puts("ÇëÊäÈë»Ø³µÒÔ¼ÌĞø³ÌĞò");
+    printf("è¯·è¾“å…¥æ•°å€¼ï¼š");
+    if (pf1 != NULL) {
+        scanf("%lf %lf", &x, &y);
+        ret1 = pf1(x, y);
+        printf("%lf\n", ret1);
+    }
+    else if (pf2 != NULL) {
+        if (pf2 == Cpl) {
+            scanf("%ld", &x2);
+            ret2 = pf2(x2, 0); // ä½¿ç”¨ç¬¬äºŒä¸ªå‚æ•°ä¸º 0
+            printf("%ld\n", ret2);
+        }
+        else {
+            scanf("%ld %ld", &x2, &y2);
+            ret2 = pf2(x2, y2);
+            printf("%ld\n", ret2);
+        }
+    }
+    else {
+        printf("å‡½æ•°æŒ‡é’ˆä¸ºç©º\n");
+        return;
+    }
+    puts("è¯·è¾“å…¥å›è½¦ä»¥ç»§ç»­ç¨‹åº");
     getchar();
-    while ((c = getchar()) != ('\n'))
-    {
+    while ((c = getchar()) != ('\n')) {
         getchar();
     }
     system("cls");
 }
 
-int main()
-{
+int main() {
     int input = 0;
-    do
-    {
-        meau();
+    do {
+        menu();
         scanf("%d", &input);
-        switch (input)
-        {
+        switch (input) {
         case 1:
-            calc(Add); break;
+            calc(Add, NULL);
+            break;
         case 2:
-            calc(Sub); break;
+            calc(Sub, NULL);
+            break;
         case 3:
-            calc(Mul); break;
+            calc(Mul, NULL);
+            break;
         case 4:
-            calc(Div); break;
+            calc(Div, NULL);
+            break;
+        case 5:
+            calc(NULL, And);
+            break;
+        case 6:
+            calc(NULL, Or);
+            break;
+        case 7:
+            calc(NULL, Cpl);
+            break;
+
         case 0:
             break;
         default:
-            printf("ÊäÈë´íÎó\n");
+            printf("è¾“å…¥é”™è¯¯\n");
             ref();
         }
-    } while (input);
+    } while (input != 0);
+
     return 0;
 }
